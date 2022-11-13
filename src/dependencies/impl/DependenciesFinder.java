@@ -42,16 +42,23 @@ public class DependenciesFinder {
         return processed;
     }
 
-    public void printGroupOfDependencies() {
-        System.out.println("All groups of dependencies are: ");
+    public List<Set<String>> getGroupOfDependencies() {
+        List<Set<String>> result = new ArrayList<>();
         for (Entry<String, List<String>> entry : dependencies.entrySet()) {
             if (!entry.getValue().isEmpty()) {
-                System.out.println(this.findDependencies(entry.getKey()).toString());
+                result.add(this.findDependencies(entry.getKey()));
             }
+        }
+        return result;
+    }
+    
+    public void printGroupOfDependencies() {
+        for (Set<String> group : getGroupOfDependencies()) {
+            System.out.println(group.toString());
         }
     }
 
-    public void printElementsThatDependOnAllOther() {
+    public Set<String> getElementsThatDependOnAllOther() {
         Set<String> result = new HashSet<>();
         Set<Entry<String, List<String>>> entries = dependencies.entrySet();
         for (Entry<String, List<String>> entry : entries) {
@@ -62,7 +69,7 @@ public class DependenciesFinder {
                 }
             }
         }
-        System.out.println("Elements that depend on all other: " + result);
+        return result;
     }
 
     public void addRawDependenciesInput(String input) {
@@ -85,7 +92,8 @@ public class DependenciesFinder {
         dependencies.addRawDependenciesInput("D A F");
         dependencies.addRawDependenciesInput("E F");
         dependencies.addRawDependenciesInput("F H");
+        System.out.println("All groups of dependencies are: ");
         dependencies.printGroupOfDependencies();
-        dependencies.printElementsThatDependOnAllOther();
+        System.out.println("Elements that depend on all other: " + dependencies.getElementsThatDependOnAllOther());
     }
 }
